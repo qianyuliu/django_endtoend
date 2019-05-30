@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/helang.css" type="text/css">
+     <!--图标样式-->
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+
+    <style type="text/css">
+        .info_box {
+            margin: 100px auto 0 auto;
+            width: 400px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0 0 0 30px;
+        }
+
+        .info_box > li {
+            padding: 15px 0;
+            font-size: 14px;
+            border-top: #e5e5e5 dashed 1px;
+        }
+
+        .info_box > li:first-child {
+            list-style: none;
+            font-size: 16px;
+            color: #FD463E;
+            border-top: none;
+            font-weight: bold;
+        }
+
+        .info_box > li:last-child {
+            list-style: none;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="hl_nav">
+    <ul class="nav_list">
+        <li class="highlight active">
+            <a class="nav_head" href="/home/">
+                <i class="icon fa fa-home"></i>
+                <span>网站首页</span>
+            </a>
+
+        </li>
+        <li class="highlight">
+            <a class="nav_head" href="/detection/">
+                <i class="icon fa fa-cloud-download"></i>
+                <span>乳腺癌检测</span>
+            </a>
+        </li>
+
+        <li class="highlight">
+            <a class="nav_head" href="/showlist/">
+                <i class="icon fa fa-list-alt"></i>
+                <span>病例信息</span>
+            </a>
+        </li>
+        <li class="right highlight">
+            <a class="nav_head" href="javascipt:;">
+                <i class="icon fa fa-cog "></i>
+                <span>用户：{{ username }}</span>
+            </a>
+
+            <a href="/changepassword" class="item">修改密码</a>
+            <a href="/logout/" class="item">退出帐号</a>
+
+    </ul>
+    <div class="shade"></div>
+</nav>
+
+
+<img src="/static/images/home.jpeg" width="100%" height="100%" >
+</body>
+</html>

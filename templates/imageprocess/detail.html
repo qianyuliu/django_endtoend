@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/helang.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+
+    <style type="text/css">
+        .info_box {
+            margin: 100px auto 0 auto;
+            width: 400px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0 0 0 30px;
+        }
+
+        .info_box > li {
+            padding: 15px 0;
+            font-size: 14px;
+            border-top: #e5e5e5 dashed 1px;
+        }
+
+        .info_box > li:first-child {
+            list-style: none;
+            font-size: 16px;
+            color: #FD463E;
+            border-top: none;
+            font-weight: bold;
+        }
+
+        .info_box > li:last-child {
+            list-style: none;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            font: 400 14px/21px Arial, serif
+        }
+
+        .example {
+            float: left;
+            width: 98%;
+            margin: 1%
+        }
+
+        table {
+            font-size: 1em;
+            border-collapse: collapse;
+            margin: 0 auto
+        }
+
+        table,
+        td,
+        th {
+            border: 1px solid #999;
+            padding: 10px 70px;
+            text-align: left
+        }
+
+        table.ex-2 {
+            min-width: 100px
+        }
+
+        th {
+            background: #f4f4f4;
+            cursor: pointer
+        }
+
+        th.sorted,
+        th:hover {
+            background: #d4d4d4
+        }
+
+        th.no-sort,
+        th.no-sort:hover {
+            background: #f4f4f4;
+            cursor: not-allowed
+        }
+
+        th.sorted.ascending:after {
+            content: "  \2191"
+        }
+
+        th.sorted.descending:after {
+            content: " \2193"
+        }
+        .disabled {
+            opacity: .5
+        }
+    </style>
+
+
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="hl_nav">
+    <ul class="nav_list">
+        <li class="highlight ">
+            <a class="nav_head" href="/home/">
+                <i class="icon fa fa-home"></i>
+                <span>网站首页</span>
+            </a>
+        </li>
+        <li class="highlight ">
+            <a class="nav_head" href="/detection/">
+                <i class="icon fa fa-cloud-download"></i>
+                <span>乳腺癌检测</span>
+            </a>
+        </li>
+
+        <li class="highlight active">
+            <a class="nav_head" href="/showlist/">
+                <i class="icon fa fa-list-alt"></i>
+                <span>病例信息</span>
+            </a>
+        </li>
+        <li class="right highlight">
+            <a class="nav_head" href="javascipt:;">
+                <i class="icon fa fa-cog "></i>
+                <span>用户：{{ username }}</span>
+            </a>
+            <a href="/changepassword/" class="item">修改密码</a>
+            <a href="/logout/" class="item">退出帐号</a>
+
+    </ul>
+    <div class="shade"></div>
+</nav>
+<div class="example ex-1">
+    <table>
+        <thead>
+        <tr>
+            <th>患者姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th class="no-sort">原始图片</th>
+            <th class="no-sort">检测图片</th>
+            <th>诊断结果</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pic in pics %}
+            <tr>
+                <td>{{ pic.name }}</td>
+                <td>{{ pic.age }}</td>
+                <td>{{ pic.gender }}</td>
+                <td><img src="{{ pic.test_pic }}" width="200"></td>
+                <td><img src="{{ pic.result_pic }}" width="200"></td>
+                <td>{{ pic.result }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+<ul>
+
+
+</ul>
+
+
+</body>
+</html>

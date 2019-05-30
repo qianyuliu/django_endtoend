@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>乳腺癌x光预测系统</title>
+
+    <link rel="stylesheet" href="/static/css/helang.css" type="text/css">
+
+    <!--图标样式-->
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+
+    <style type="text/css">
+        .info_box {
+            margin: 100px auto 0 auto;
+            width: 400px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0 0 0 30px;
+        }
+
+        .info_box > li {
+            padding: 15px 0;
+            font-size: 14px;
+            border-top: #e5e5e5 dashed 1px;
+        }
+
+        .info_box > li:first-child {
+            list-style: none;
+            font-size: 16px;
+            color: #FD463E;
+            border-top: none;
+            font-weight: bold;
+        }
+
+        .info_box > li:last-child {
+            list-style: none;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+
+
+    <style type="text/css">
+        #preview {
+            width: 450px;
+            height: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #000;
+            overflow: hidden;
+        }
+
+        #imghead {
+            filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/threecolumn.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+
+    <script type="text/javascript">
+        //图片上传预览    IE是用了滤镜。
+        function previewImage(file) {
+            //验证图片格式
+            var img_id = document.getElementById('image').value; //根据id得到值
+            var index = img_id.lastIndexOf("."); //（考虑严谨用lastIndexOf(".")得到）得到"."在第几位
+            img_id = img_id.substring(index); //截断"."之前的，得到后缀
+            if (img_id != ".jpg") {  //根据后缀，判断是否符合图片格式
+                alert("请选择jpg格式的图片");
+                document.getElementById('image').value = "";  // 不符合，就清除，重新选择
+
+            }
+
+            var MAXWIDTH = 450;
+            var MAXHEIGHT = 450;
+            var div = document.getElementById('preview');
+            if (file.files && file.files[0]) {
+                div.innerHTML = '<img id=imghead>';
+                var img = document.getElementById('imghead');
+                img.onload = function () {
+                    var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                    img.width = rect.width;
+                    img.height = rect.height;
+//                 img.style.marginLeft = rect.left+'px';
+                    img.style.marginTop = rect.top + 'px';
+                }
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    img.src = evt.target.result;
+                }
+                reader.readAsDataURL(file.files[0]);
+            } else //兼容IE
+            {
+                var sFilter = 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+                file.select();
+                var src = document.selection.createRange().text;
+                div.innerHTML = '<img id=imghead>';
+                var img = document.getElementById('imghead');
+                img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+                status = ('rect:' + rect.top + ',' + rect.left + ',' + rect.width + ',' + rect.height);
+                div.innerHTML = "<div id=divhead style='width:" + rect.width + "px;height:" + rect.height + "px;margin-top:" + rect.top + "px;" + sFilter + src + "\"'></div>";
+            }
+        }
+
+        function clacImgZoomParam(maxWidth, maxHeight, width, height) {
+            var param = {top: 0, left: 0, width: width, height: height};
+            if (width > maxWidth || height > maxHeight) {
+                rateWidth = width / maxWidth;
+                rateHeight = height / maxHeight;
+
+                if (rateWidth > rateHeight) {
+                    param.width = maxWidth;
+                    param.height = Math.round(height / rateWidth);
+                } else {
+                    param.width = Math.round(width / rateHeight);
+                    param.height = maxHeight;
+                }
+            }
+
+            param.left = Math.round((maxWidth - param.width) / 2);
+            param.top = Math.round((maxHeight - param.height) / 2);
+            return param;
+        }
+    </script>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="hl_nav">
+    <ul class="nav_list">
+        <li class="highlight ">
+            <a class="nav_head" href="/home/">
+                <i class="icon fa fa-home"></i>
+                <span>网站首页</span>
+            </a>
+
+        </li>
+        <li class="highlight active">
+            <a class="nav_head" href="/detection/">
+                <i class="icon fa fa-cloud-download"></i>
+                <span>乳腺癌检测</span>
+            </a>
+        </li>
+
+        <li class="highlight">
+            <a class="nav_head" href="/showlist/">
+                <i class="icon fa fa-list-alt"></i>
+                <span>病例信息</span>
+            </a>
+        </li>
+        <li class="right highlight">
+            <a class="nav_head" href="javascipt:;">
+                <i class="icon fa fa-cog "></i>
+                <span>用户：{{ username }}</span>
+            </a>
+            <a href="/changepassword/" class="item">修改密码</a>
+            <a href="/logout/" class="item">退出帐号</a>
+
+    </ul>
+    <div class="shade"></div>
+</nav>
+
+
+<div class="container">
+    <div class="childDiv">
+        <br>
+        <form>
+            <input type="file" onchange="previewImage(this)" id="image">
+            <input type="button" id="upload_pic_test" value="开始检测">
+
+        </form>
+
+        <div id="preview">
+            <img id="imghead" border="0" src="/static/images/head_180.jpg" width="100%" height="100%">
+        </div>
+    </div>
+
+    <div class="childDiv">
+        <br>
+
+        <br>
+        <div class="" id="preview">
+            <img id="result" border="0" src="/static/images/head_180.jpg" width="100%" height="100%">
+        </div>
+
+    </div>
+
+</div>
+
+
+患者姓名：
+<input type="text" id="name"><a>*</a>
+性别：
+<input type="radio" value="女" name="sex" checked="checked">女</input>
+<input type="radio" value="男" name="sex">男</input><a>*</a>
+年龄：
+<input type="number" id="age" min="1" max="100"><a>*</a>
+医师诊断结果：
+<input type="text" id="info"><a>*</a>
+<input type="button" id="savapic" value="保存诊断结果">
+
+<textarea name="" id="str_info" cols="230" rows="15" placeholder="检测结果信息." disabled></textarea><br>
+
+
+</body>
+<script type="text/javascript">
+    var test_pic = '';
+    var result_pic = '';
+    var user_id = '';
+    $(function () {
+        $("#upload_pic_test").click(function () {
+                $("#upload_pic_test").val("正在检测中...");
+                var form_data = new FormData();
+                form_data.append('pic', $("#image")[0].files[0]);
+                console.log('form_data:' + form_data);
+
+                $.ajax({
+                    url: '/uploadtest/',
+                    type: 'post',
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    success: function (data) {
+                        if (data.res == 1) {
+                            $("#result").attr('src', data.result_pic);
+                            test_pic = data.test_pic;
+                            result_pic = data.result_pic;
+                            user_id = data.user_id;
+                            $("#str_info").val(data.str_info);
+                            console.log(test_pic)
+                            console.log(result_pic)
+                            $("#upload_pic_test").val("开始检测")
+
+                        }
+                        if (data.res == 0) {
+                            alert('请先选择图片');
+                            $("#upload_pic_test").val("开始检测")
+                        }
+                    },
+
+                });
+
+            }
+        );
+        $("#savapic").click(function () {
+            var name = $("#name").val();
+            var age = $("#age").val();
+            var gender = $("input[type='radio']:checked").val();
+            var info = $("#info").val();
+
+            if (test_pic == '' || result_pic == '' || user_id == '') {
+                alert('请先上传图片并检测后再试');
+                return;
+            }
+            if (name == '' || age == '' || gender == '' || info == '') {
+                alert("请输入患者的姓名、性别、年龄和检测结果");
+                return;
+            }
+            $.ajax({
+                url: '/savepic/',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    name: name,
+                    age: age,
+                    gender: gender,
+                    info: info,
+                    test_pic: test_pic,
+                    result_pic: result_pic,
+                    user_id: user_id
+                },
+                success: function (data) {
+                    if (data.res == 1) {
+                        alert('保存病例信息成功');
+                        location.href = '/detection/';
+                    }
+                    if (data.res == 0) {
+                        alert('保存病例信息失败，请重试')
+                    }
+                }
+            })
+        })
+    })
+
+</script>
+</html>
